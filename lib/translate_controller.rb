@@ -19,6 +19,7 @@ class TranslateController < ActionController::Base
   end
   
   def translate
+    params[:key] ||= {}
     I18n.backend.store_translations(@to_locale, Translate::Keys.to_deep_hash(params[:key]))
     Translate::Storage.new(@to_locale).write_to_file
     Translate::Log.new(@from_locale, @to_locale, params[:key].keys).write_to_file
@@ -142,7 +143,7 @@ class TranslateController < ActionController::Base
   
   def set_locale
     session[:from_locale] ||= default_locale
-    session[:to_locale] ||= :en
+    session[:to_locale] ||= "en-US".to_sym
     session[:from_locale] = params[:from_locale] if params[:from_locale].present?
     session[:to_locale] = params[:to_locale] if params[:to_locale].present?
     @from_locale = session[:from_locale].to_sym

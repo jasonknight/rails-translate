@@ -112,7 +112,8 @@ class Translate::Keys
   #    }
   #   }
   # }
-  def self.to_deep_hash(hash)    
+  def self.to_deep_hash(hash) 
+    return {} if hash.nil? or not hash.respond_to? :inject
     hash.inject({}) do |deep_hash, (key, value)|
       keys = key.to_s.split('.').reverse
       leaf_key = keys.shift
